@@ -4,6 +4,30 @@ from sqlalchemy.orm import declarative_base
 db = create_engine("sqlite:///librion.db")
 Base = declarative_base()
 
+class Biblioteca(Base):
+    __tablename__ = "bibliotecas"
+
+    id = Column("id", Integer, primary_key=True, autoincrement=True)
+    nome = Column("nome", String, nullable=False)
+    admin = Column("admin", Boolean, default=False, nullable=False)
+
+    def __init__(self, nome, admin = False):
+        self.nome = nome
+        self.admin = admin
+
+class Usuario(Base):
+    __tablename__ = "usuarios"
+
+    id = Column("id", Integer,  primary_key=True, autoincrement=True)
+    nome = Column("nome_completo", String, nullable=False)
+    idade = Column("idade", Integer, nullable=False)
+    biblioteca_mae = Column("biblioteca_mae", ForeignKey("bibliotecas.id"), nullable=False)
+
+    def __init__(self, nome, idade, biblioteca_mae):
+        self.nome = nome
+        self.idade = idade
+        self.biblioteca_mae = biblioteca_mae
+
 class Livro(Base):
     __tablename__ = "livros"
     
@@ -24,3 +48,21 @@ class Livro(Base):
         self.autor = autor
         self.data_lancamento = data_lancamento
         self.imagem_capa = imagem_capa
+
+#Tabela Associativa (livro_biblioteca)
+class BibliotecaLivro(Base):
+    __tablename__ = "biblioteca_livros"
+
+    id = Column("id", Integer, primary_key=True, autoincrement=True)
+    id_livro = Column("fk_livro", ForeignKey("livros.id"), nullable=False)
+    id_biblioteca = Column("fk_biblioteca", ForeignKey("bibliotecas.id"), nullable=False)
+    quantidade = Column("quantidade", Integer, default=1, nullable=False)
+    disponivel = Column("disponivel", Boolean, default=True, nullable=False)
+    is_global = Column("is_global", Boolean, default=False, nullable=False)
+
+    def __init__(self, id_livro, id_biblioteca, quantidade = 1, disponivel = True, is_global = False):
+        self.id_livro = id_livro
+        self.id_biblioteca = id_biblioteca
+        self.quantidade = quantidade
+        self.disponivel = disponivel
+        self.is_global = is_global
