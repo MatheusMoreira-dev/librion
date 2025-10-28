@@ -2,9 +2,9 @@ from fastapi import FastAPI
 
 app = FastAPI()
 
-from routers import livro_routers
-app.include_router(livro_routers)
+from routers.livros_routers import livros_router
+app.include_router(livros_router)
 
 @app.get("/")
-def home():
+async def home():
     return {"mensagem": "Página inicial da API"}
