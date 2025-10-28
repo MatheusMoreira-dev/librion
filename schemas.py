@@ -9,3 +9,10 @@ class BibliotecaSchema(BaseModel):
 
     class Config:
         from_attributes = True
+
+class LoginBibliotecaSchema(BaseModel):
+    email: str
+    senha: str
+
+    class Confing:
+        from_attributes = True

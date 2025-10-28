@@ -20,8 +20,3 @@ from routers.biblioteca_routers import biblioteca_router
 # Associando as rotas ao meu app
 app.include_router(livro_router)
 app.include_router(biblioteca_router)
-
-# Página "default" da minha API
-@app.get("/")
-async def home():
-    return {"mensagem": "Página inicial da API"}
