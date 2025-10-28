@@ -16,9 +16,19 @@ async def home():
 # Cadastrando uma nova biblioteca
 @biblioteca_router.post("/cadastrar")
 async def register(biblioteca_schema: BibliotecaSchema, session: Session  = Depends(get_session)):
-    senha_criptografada = bcrypt_context.hash(biblioteca_schema.senha)
+    biblioteca = session.query(Biblioteca).filter(Biblioteca.email == biblioteca_schema.email).first()
     
-    nova_biblioteca = Biblioteca(biblioteca_schema.nome, senha_criptografada, biblioteca_schema.email, biblioteca_schema.admin)
-    session.add(nova_biblioteca)
-    session.commit()
-    return {"mensagem":"biblioteca cadastrada!"}
+    if biblioteca:
+        # Se a biblioteca já existir
+        raise HTTPException(status_code=400, detail="Biblioteca já cadastrada")
+    else:
+        # Criptografa a  senha
+        senha_criptografada = bcrypt_context.hash(biblioteca_schema.senha)
+        
+        # cria um objeto da biblioteca
+        nova_biblioteca = Biblioteca(**biblioteca_schema.model_dump(exclude_unset=True))
+        
+        # Adiciona no banco pelo session
+        session.add(nova_biblioteca)
+        session.commit()
+        return {"mensagem":"biblioteca cadastrada!"}
