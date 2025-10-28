@@ -9,11 +9,15 @@ class Biblioteca(Base):
 
     id = Column("id", Integer, primary_key=True, autoincrement=True)
     nome = Column("nome", String, nullable=False)
+    senha = Column("senha", String, nullable=False)
+    email = Column("email", String, nullable=False)
     admin = Column("admin", Boolean, default=False, nullable=False)
 
-    def __init__(self, nome, admin = False):
+    def __init__(self, nome, email, senha, admin = False):
         self.nome = nome
         self.admin = admin
+        self.email = email
+        self.senha = senha
 
 class Livro(Base):
     __tablename__ = "livros"
