@@ -15,19 +15,6 @@ class Biblioteca(Base):
         self.nome = nome
         self.admin = admin
 
-class Usuario(Base):
-    __tablename__ = "usuarios"
-
-    id = Column("id", Integer,  primary_key=True, autoincrement=True)
-    nome = Column("nome_completo", String, nullable=False)
-    idade = Column("idade", Integer, nullable=False)
-    biblioteca_mae = Column("biblioteca_mae", ForeignKey("bibliotecas.id"), nullable=False)
-
-    def __init__(self, nome, idade, biblioteca_mae):
-        self.nome = nome
-        self.idade = idade
-        self.biblioteca_mae = biblioteca_mae
-
 class Livro(Base):
     __tablename__ = "livros"
     
@@ -49,7 +36,20 @@ class Livro(Base):
         self.data_lancamento = data_lancamento
         self.imagem_capa = imagem_capa
 
-#Tabela Associativa (livro_biblioteca)
+class Usuario(Base):
+    __tablename__ = "usuarios"
+
+    id = Column("id", Integer,  primary_key=True, autoincrement=True)
+    nome = Column("nome_completo", String, nullable=False)
+    idade = Column("idade", Integer, nullable=False)
+    biblioteca_mae = Column("biblioteca_mae", ForeignKey("bibliotecas.id"), nullable=False)
+
+    def __init__(self, nome, idade, biblioteca_mae):
+        self.nome = nome
+        self.idade = idade
+        self.biblioteca_mae = biblioteca_mae
+
+#Tabela Associativa (livro_biblioteca) (e)
 class BibliotecaLivro(Base):
     __tablename__ = "biblioteca_livros"
 
@@ -66,3 +66,13 @@ class BibliotecaLivro(Base):
         self.quantidade = quantidade
         self.disponivel = disponivel
         self.is_global = is_global
+
+#Tabela Associativa (Usuario_livro) (Empréstimo)
+class UsuarioLivro(Base):
+    __tablename__ = "usuario_livros"
+
+    id = Column("id", Integer, primary_key=True, autoincrement=True)
+    id_biblioteca_livro = Column("id_biblioteca_livro", ForeignKey("biblioteca_livros.id"), nullable=False)
+    data_solicitacao = Column("data_solicitacao", String, nullable=False)
+    data_retirada = Column("data_retirada", String, nullable=False)
+    data_devolucao = Column("data_devolucao", String, nullable=False)
